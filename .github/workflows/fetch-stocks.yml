@@ -57,6 +57,8 @@ jobs:
         run: cat $GITHUB_WORKSPACE/amex/amex_tickers.txt $GITHUB_WORKSPACE/nyse/nyse_tickers.txt $GITHUB_WORKSPACE/nasdaq/nasdaq_tickers.txt > /tmp/all_tickers.txt
       - name: head
         run: cat /tmp/all_tickers.txt | sort -u | uniq > $GITHUB_WORKSPACE/all/all_tickers.txt
+      - name: concat-all-json
+        run: "jq -s '. | flatten | unique_by(.symbol)' $GITHUB_WORKSPACE/amex/amex_full_tickers.json $GITHUB_WORKSPACE/nasdaq/nasdaq_full_tickers.json $GITHUB_WORKSPACE/nyse/nyse_full_tickers.json > $GITHUB_WORKSPACE/all/all_full_tickers.json"
       - name: commit-new-files
         run: |
           git config user.name github-actions
